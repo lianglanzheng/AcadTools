@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlotFormatter", "PlotFormatter\PlotFormatter.csproj", "{5AC60804-0803-4FD1-90B5-F3D4CF8DC551}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AC60804-0803-4FD1-90B5-F3D4CF8DC551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC60804-0803-4FD1-90B5-F3D4CF8DC551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC60804-0803-4FD1-90B5-F3D4CF8DC551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC60804-0803-4FD1-90B5-F3D4CF8DC551}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80006923-13E1-45FF-95D2-BB1570C5E07A}
+	EndGlobalSection
+EndGlobal

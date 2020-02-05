@@ -1,0 +1,10 @@
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\bin\Release\PlotFormatter.exe.config
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\bin\Release\PlotFormatter.exe
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\bin\Release\PlotFormatter.pdb
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\PlotFormatter.csprojAssemblyReference.cache
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\Interop.AutoCAD.dll
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\Interop.AXDBLib.dll
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\PlotFormatter.csproj.ResolveComReference.cache
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\PlotFormatter.csproj.CoreCompileInputs.cache
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\PlotFormatter.exe
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\PlotFormatter\obj\Release\PlotFormatter.pdb
