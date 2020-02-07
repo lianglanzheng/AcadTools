@@ -1,0 +1,7 @@
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\bin\Debug\CagdtoJson.exe.config
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\bin\Debug\CagdtoJson.exe
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\bin\Debug\CagdtoJson.pdb
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\obj\Debug\CagdtoJson.csprojAssemblyReference.cache
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\obj\Debug\CagdtoJson.csproj.CoreCompileInputs.cache
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\obj\Debug\CagdtoJson.exe
+C:\Users\llz\Desktop\VSWorkSpace\AcadTools\CagdtoJson\obj\Debug\CagdtoJson.pdb
