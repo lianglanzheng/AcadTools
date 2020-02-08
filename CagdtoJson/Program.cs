@@ -118,7 +118,6 @@ namespace CagdtoJson
         public string 野外描述;
         public decimal 侧摩阻力标准值;
         public decimal 容许承载力;
-        public decimal 层厚;
     }
     class 桩柱集 : Dictionary<string, 桩柱> { }
     class 桩柱
@@ -261,12 +260,6 @@ namespace CagdtoJson
                     i钻孔.地层集.Add(i地层);
                 }
                 i钻孔.地层集 = i钻孔.地层集.OrderBy(x => long.Parse(x.地层序号)).ToList();
-                decimal 顶层深度 = 0;
-                for (int i = 0; i < i钻孔.地层集.Count; i++)
-                {
-                    i钻孔.地层集[i].层厚 = i钻孔.地层集[i].换层深度 - 顶层深度;
-                    顶层深度 = i钻孔.地层集[i].换层深度;
-                }
                 i钻孔集.Add(i钻孔编号 , i钻孔);
             }
             桩柱钻孔工程集 i桩柱钻孔工程集 = new 桩柱钻孔工程集();

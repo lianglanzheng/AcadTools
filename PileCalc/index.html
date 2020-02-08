@@ -1,0 +1,40 @@
+<html>
+<script type="text/javascript" src="./PileCalc.js"></script>
+<body>
+
+<h1>桩柱钻孔工程</h1>
+
+<input type="file" id="ImportJsonButton" onchange="ImportJson()"/>
+
+<div style="width: 100%">
+
+	<div style="height: 100%; width: 43%; float: left; margin-right: 1%; background-color: #EEF">
+		<h3>查看地质钻孔: <select id="DrillSelect" onchange="RefreshDrillSelect()"></select></h3>
+		<div id="DrillInfo" style="width: 99%; border: 1px solid #AAF">
+			<div style="display: inline-block; width: 25%">钻孔编号: </div> <input name="钻孔编号" readonly="readonly"> <br>
+			<div style="display: inline-block; width: 25%">孔口标高: </div> <input name="孔口标高" readonly="readonly"> <br>
+			<div style="display: inline-block; width: 25%">钻孔深度: </div> <input name="钻孔深度" readonly="readonly"> <br>
+			<div style="display: inline-block; width: 25%">线别工程名称: </div> <input style="width: 72%" name="线别工程名称" readonly="readonly"> <br>
+			<h4>土层列表: </h4>
+			<ol name="土层列表" start="0" style="padding: 0">
+			</ol> 
+		</div>
+	</div>
+
+	<div style="height: 100%; width: 55%; float: right; margin-right: 1%; background-color: #FEE">
+		<h3>桩柱计算: <select id="PileSelect" onchange="LoadPile()"></select></h3>
+		<div id="ConInfo" style="width: 99%; border: 1px solid #FAA">
+			<div style="display: inline-block; width: 15%">桩柱名称: </div> <input name="桩柱名称"> <div style="display: inline-block; width: 18%"></div> <button type="button" onclick="NewPile()">新建</button> <button type="button">保存</button> <br>
+			<div style="display: inline-block; width: 15%">备注: </div> <input style="width: 75%" name="备注"> <br>
+			<div style="display: inline-block; width: 15%">参考钻孔: </div> <input name="参考钻孔" readonly="readonly"> <br>
+			<div style="display: inline-block; width: 15%">孔口标高: </div> <input name="孔口标高"> <br>
+			<h4>土层列表: </h4>
+			<ol name="土层列表" start="0" style="padding: 0">
+			</ol> 
+		</div>
+	</div>
+
+</div>
+
+</body>
+</html>
