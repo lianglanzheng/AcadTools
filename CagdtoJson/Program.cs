@@ -122,10 +122,11 @@ namespace CagdtoJson
     class 桩柱集 : Dictionary<string, 桩柱> { }
     class 桩柱
     {
+        public string 备注;
         public string 参考钻孔;
+        public decimal 桩径;
         public decimal 桩顶标高;
         public decimal 桩底标高;
-        public decimal 桩径;
         钻孔 施工地质 = new 钻孔();
     }
     class Program
