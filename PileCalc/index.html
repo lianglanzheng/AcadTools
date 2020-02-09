@@ -6,7 +6,8 @@
 <div style="width: 100%; height: 88%; max-width: 1600px; margin:0 auto">
 	<h1>桩柱钻孔工程</h1>
 	<input type="file" id="ImportJsonButton" onchange="ImportJson()"/>
-	<button type="button" id="ExportJsonButton" onclick="ExportJson()" disabled>导出</button>
+	<button type="button" id="ExportJsonButton" onclick="ExportJson()" disabled>保存</button>
+	<button type="button" id="ExportResultButton" onclick="ExportResult()" disabled>导出计算结果</button>
 
 	<div style="width: 100%">
 		<div style="height: 100%; width: 43%; float: left; margin-right: 1%; background-color: #EEF">
@@ -34,7 +35,7 @@
 				<div style="display: inline-block; width: 15%">桩底标高: </div> <input name="桩底标高" type="number" style="text-align: center; width: 21%"> <br>
 				<h4>土层列表: </h4>
 				<ol name="土层列表" start="0" style="padding: 0">
-				</ol> 
+				</ol>
 				<h4>计算结果: </h4>
 				<textarea name="计算结果" rows="10" style="resize: none; width: 100%; background-color: #FEE; border-top: 1px solid #FAA; border-right-style: none; border-bottom-style: none; border-left-style: none"></textarea>
 			</div>

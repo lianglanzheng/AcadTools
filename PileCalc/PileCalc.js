@@ -23,6 +23,11 @@ function NumTextFix(value) {
 	else return value;
 }
 
+function LineCount(str) {
+	lines = str.split("\n");
+	return lines.length;
+}
+
 function TriggerClick(obj) {
 	var MouseEvents = document.createEvent("MouseEvents");
 	MouseEvents.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -31,6 +36,8 @@ function TriggerClick(obj) {
 
 function init() {
 	ImportJsonButton = document.getElementById("ImportJsonButton");
+	ExportJsonButton = document.getElementById("ExportJsonButton");
+	ExportResultButton = document.getElementById("ExportResultButton");
 	DrillSelect = document.getElementById("DrillSelect");
 	PileSelect = document.getElementById("PileSelect");
 	DrillInfo = new Object();
@@ -55,6 +62,7 @@ function ImportJson() {
 	init();
 	ImportJsonButton.disabled = true;
 	ExportJsonButton.disabled = false;
+	ExportResultButton.disabled = false;
 	var reader = new FileReader();
 	reader.readAsText(ImportJsonButton.files[0]);
 	reader.onload = function(evt) {
@@ -69,6 +77,33 @@ function ExportJSON() {
 	var SaveLink = document.createElement("a");
 	SaveLink.href = URL.createObjectURL(Export_Blob);
 	SaveLink.download = "新建桩柱钻孔工程.json";
+	TriggerClick(SaveLink);
+}
+
+function ExportResult() {
+	var ExWin = window.open("");
+	ExWin.document.charset = "UTF-8";
+	ExWin.document.title = "计算结果";
+	var ele = ExWin.document.createElement("h1");
+	ele.textContent = "计算结果";
+	ExWin.document.body.append(ele);
+
+	var Keys桩柱集 = Object.keys(PileCalcPrj.桩柱集);
+	Keys桩柱集.sort().forEach(element => {
+		var ele = ExWin.document.createElement("h3");
+		ele.textContent = element;
+		ExWin.document.body.append(ele);
+		var thisCalcInfo = CalcPile(element, PileCalcPrj.桩柱集[element]);
+		var ele = ExWin.document.createElement("textarea");
+		ele.style = "resize: none; width: 100%";
+		ele.textContent = thisCalcInfo.ResultText;
+		ele.rows = LineCount(thisCalcInfo.ResultText);
+		ExWin.document.body.append(ele);
+	});
+	var Export_Blob = new Blob([ExWin.document.documentElement.outerHTML]);
+	var SaveLink = document.createElement("a");
+	SaveLink.href = URL.createObjectURL(Export_Blob);
+	SaveLink.download = "计算结果.html";
 	TriggerClick(SaveLink);
 }
 
@@ -423,7 +458,8 @@ function CalcPile(name, target) {
 
 		thisCalcInfo.承载力容许值 = DecimalCalc(thisCalcInfo.侧摩阻力项 + thisCalcInfo.桩端承载力项 + thisCalcInfo.置换土重项);
 		var ResultText_Summary;
-		ResultText_Summary = "桩顶承载力容许值[Ra]: " + thisCalcInfo.承载力容许值 + "kN\n";
+		ResultText_Summary = "桩长: " + thisCalcInfo.桩长 + "m, 桩径: " + thisCalcInfo.桩径 + "m, 桩顶标高: " + thisCalcInfo.桩顶标高 + "m, 桩底标高: " + thisCalcInfo.桩底标高 + "m\n";
+		ResultText_Summary += "桩顶承载力容许值[Ra]: " + thisCalcInfo.承载力容许值 + "kN\n";
 		ResultText_Summary += "1/2u SUM(qi*li) + Ap*qr = " + thisCalcInfo.侧摩阻力项 + "kN + " + thisCalcInfo.桩端承载力项 + "kN + " + thisCalcInfo.置换土重项 + "kN = " + thisCalcInfo.承载力容许值 + "kN\n";
 		ResultText_Summary += "\n";
 		thisCalcInfo.ResultText = ResultText_Summary + thisCalcInfo.ResultText;
