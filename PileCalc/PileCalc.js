@@ -7,6 +7,8 @@ var ConInfo;
 var CurrentDrill;
 var CurrentPile;
 var CurrentPile_Name;
+var CalcInfo;
+var Pi = 3.141592654;
 
 function DecimalCalc(value) {
 	return Number(value.toPrecision(10));
@@ -22,9 +24,9 @@ function NumTextFix(value) {
 }
 
 function TriggerClick(obj) {
-  var MouseEvents = document.createEvent("MouseEvents");
-  MouseEvents.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-  obj.dispatchEvent(MouseEvents);
+	var MouseEvents = document.createEvent("MouseEvents");
+	MouseEvents.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	obj.dispatchEvent(MouseEvents);
 }
 
 function init() {
@@ -46,6 +48,7 @@ function init() {
 	ConInfo.桩径 = document.getElementById("ConInfo").children.桩径;
 	ConInfo.桩顶标高 = document.getElementById("ConInfo").children.桩顶标高;
 	ConInfo.桩底标高 = document.getElementById("ConInfo").children.桩底标高;
+	ConInfo.计算结果 = document.getElementById("ConInfo").children.计算结果;
 }
 
 function ImportJson() {
@@ -98,13 +101,14 @@ function RefreshPileSelect() {
 	});
 }
 
-function RefreshDrillSelect() {
-	if (DrillSelect.firstChild.value == "") DrillSelect.removeChild(DrillSelect.firstChild);
-	CurrentDrill = PileCalcPrj.钻孔集[DrillSelect.value];
+function RefreshDrill_基本() {
 	DrillInfo.钻孔编号.value = DrillSelect.value;
 	DrillInfo.孔口标高.value = CurrentDrill.孔口标高;
 	DrillInfo.钻孔深度.value = CurrentDrill.钻孔深度;
 	DrillInfo.线别工程名称.value = CurrentDrill.线别工程名称;
+}
+
+function RefreshDrill_土层() {
 	var ol = DrillInfo.土层列表;
 	while (ol.childNodes.length > 0) ol.removeChild(ol.firstChild);
 	if (true) {
@@ -182,6 +186,13 @@ function RefreshDrillSelect() {
 	});
 }
 
+function RefreshDrillInfo() {
+	if (DrillSelect.firstChild.value == "") DrillSelect.removeChild(DrillSelect.firstChild);
+	CurrentDrill = PileCalcPrj.钻孔集[DrillSelect.value];
+	RefreshDrill_基本();
+	RefreshDrill_土层();
+}
+
 function NewPile() {
 	if (CurrentDrill != null) {
 		CurrentPile_Name = ObjAsg(CurrentDrill.线别工程名称 + "-" + DrillInfo.钻孔编号.value);
@@ -189,8 +200,8 @@ function NewPile() {
 		CurrentPile["备注"] = Date();
 		CurrentPile["参考钻孔"] = ObjAsg(DrillInfo.钻孔编号.value);
 		CurrentPile["桩径"] = 1;
-		CurrentPile["桩顶标高"] = 0;
-		CurrentPile["桩底标高"] = 0;
+		CurrentPile["桩顶标高"] = CurrentDrill.孔口标高;
+		CurrentPile["桩底标高"] = DecimalCalc(CurrentDrill.孔口标高 - CurrentDrill.钻孔深度);
 		CurrentPile["施工地质"] = ObjAsg(CurrentDrill);
 		RefreshPileInfo();
 	}
@@ -221,8 +232,7 @@ function DelPile() {
 	}
 }
 
-function RefreshPileInfo() {
-	if (PileSelect.firstChild.value == "") PileSelect.removeChild(PileSelect.firstChild);
+function RefreshPile_基本() {
 	ConInfo.桩柱名称.value = CurrentPile_Name;
 	ConInfo.备注.value = CurrentPile.备注;
 	ConInfo.参考钻孔.value = CurrentPile.参考钻孔;
@@ -236,6 +246,9 @@ function RefreshPileInfo() {
 	ConInfo.桩径.onchange = PileEdit_Chg桩径;
 	ConInfo.桩顶标高.onchange = PileEdit_Chg桩顶标高;
 	ConInfo.桩底标高.onchange = PileEdit_Chg桩底标高;
+}
+
+function RefreshPile_土层() {
 	var ol = ConInfo.土层列表;
 	while (ol.childNodes.length > 0) ol.removeChild(ol.firstChild);
 	if (true) {
@@ -333,6 +346,102 @@ function RefreshPileInfo() {
 		li.appendChild(libt);
 		ol.appendChild(li);
 	});
+}
+
+function CalcPile(name, target) {
+	var thisCalcInfo = new Object();
+	thisCalcInfo = ObjAsg(target);
+	thisCalcInfo.isError = false;
+	thisCalcInfo.ResultText = "";
+	thisCalcInfo.承载力容许值 = 0;
+	thisCalcInfo.钢筋砼容重 = 26;
+	thisCalcInfo.土容重 = 18;
+	thisCalcInfo.桩端发挥系数 = 0.1;
+	thisCalcInfo.清底系数m0 = 0.85;
+	thisCalcInfo.修正系数λ = 0.65;
+	thisCalcInfo.桩长 = DecimalCalc(thisCalcInfo.桩顶标高 - thisCalcInfo.桩底标高);
+	if (thisCalcInfo.桩长 < 0) {
+		thisCalcInfo.isError = true;
+		thisCalcInfo.ResultText += "错误: 桩长为负。\n";
+	}
+	thisCalcInfo.桩周长 = DecimalCalc(thisCalcInfo.桩径 * Pi);
+	if (thisCalcInfo.桩周长 < 0) {
+		thisCalcInfo.isError = true;
+		thisCalcInfo.ResultText += "错误: 桩周长为负。\n";
+	}
+	thisCalcInfo.桩截面积 = DecimalCalc(Math.pow(thisCalcInfo.桩径 / 2, 2) * Pi);
+	if (thisCalcInfo.桩截面积 < 0) {
+		thisCalcInfo.isError = true;
+		thisCalcInfo.ResultText += "错误: 桩截面积为负。\n";
+	}
+	var 当前标高 = thisCalcInfo.施工地质.孔口标高;
+	thisCalcInfo.施工地质.地层集.forEach(element => {
+		element.层顶标高 = 当前标高;
+		element.层底标高 = DecimalCalc(thisCalcInfo.施工地质.孔口标高 - element.换层深度);
+		element.层厚 = DecimalCalc(element.层顶标高 - element.层底标高);
+		element.计算厚度 = DecimalCalc(Math.max(Math.min(thisCalcInfo.桩顶标高, element.层顶标高) - Math.max(thisCalcInfo.桩底标高, element.层底标高), 0));
+		当前标高 = element.层底标高;
+		if (element.层厚 < 0) {
+			thisCalcInfo.isError = true;
+			thisCalcInfo.ResultText += "错误: 地层\"" + element.地层序号 + " " + element.土类名称 + "\"层厚为负。\n";
+		}
+	});
+	if (!thisCalcInfo.isError) {
+		thisCalcInfo.侧摩阻因子合计 = 0;
+		thisCalcInfo.施工地质.地层集.forEach(element => {
+			element.侧摩阻因子 = 0;
+			if (element.计算厚度 > 0) {
+				element.侧摩阻因子 = DecimalCalc(element.计算厚度 * element.侧摩阻力标准值);
+				thisCalcInfo.ResultText += element.地层序号 + " " + element.土类名称 + ": " + element.侧摩阻力标准值 + "kPa * " + element.计算厚度 + "m = " + element.侧摩阻因子 + "kN/m\n";
+			}
+			thisCalcInfo.侧摩阻因子合计 = DecimalCalc(thisCalcInfo.侧摩阻因子合计 + element.侧摩阻因子);
+		});
+		thisCalcInfo.ResultText += "侧摩阻因子合计: " + thisCalcInfo.侧摩阻因子合计 + "kN/m\n";
+		thisCalcInfo.侧摩阻力项 = DecimalCalc(0.5 * thisCalcInfo.侧摩阻因子合计 * thisCalcInfo.桩周长);
+		thisCalcInfo.ResultText = "侧摩阻力项: 1/2 * " + thisCalcInfo.桩径 + "m * π * " + thisCalcInfo.侧摩阻因子合计 + "kN/m = " + thisCalcInfo.侧摩阻力项 + "kN\n" + thisCalcInfo.ResultText;
+		thisCalcInfo.ResultText += "\n";
+
+		thisCalcInfo.桩重 =	DecimalCalc(thisCalcInfo.桩截面积 * thisCalcInfo.桩长 * thisCalcInfo.钢筋砼容重);
+		thisCalcInfo.土重 = 0;
+		thisCalcInfo.施工地质.地层集.forEach(element => thisCalcInfo.土重 = DecimalCalc(thisCalcInfo.土重 + thisCalcInfo.桩截面积 * element.计算厚度 * thisCalcInfo.土容重));
+		thisCalcInfo.置换土重项 = DecimalCalc(thisCalcInfo.土重 - thisCalcInfo.桩重);
+		thisCalcInfo.ResultText += "置换土重项: " + thisCalcInfo.置换土重项 + "kN\n";
+		thisCalcInfo.ResultText += "桩重: π/4 * " + thisCalcInfo.桩径 + "m * " + thisCalcInfo.桩长 + "m * " + thisCalcInfo.钢筋砼容重 + "kN/m^3 = " + thisCalcInfo.桩重 + "kN\n";
+		thisCalcInfo.ResultText += "土重: (土容重: " + thisCalcInfo.土容重 + "kN/m^3) " + thisCalcInfo.土重 + "kN\n";
+		thisCalcInfo.ResultText += "\n";
+
+		thisCalcInfo.桩端处土承载力fa0 = 0;
+		thisCalcInfo.施工地质.地层集.forEach(element => {
+			if (thisCalcInfo.桩底标高 <= element.层顶标高 && thisCalcInfo.桩底标高 >= element.层底标高) thisCalcInfo.桩端处土承载力fa0 = element.容许承载力;
+		});
+		thisCalcInfo.桩端承载力计算值 = DecimalCalc(thisCalcInfo.桩截面积 * thisCalcInfo.清底系数m0 * thisCalcInfo.修正系数λ * thisCalcInfo.桩端处土承载力fa0);
+		thisCalcInfo.桩端承载力限值 = DecimalCalc(thisCalcInfo.侧摩阻力项 * (thisCalcInfo.桩端发挥系数 / (1 - thisCalcInfo.桩端发挥系数)));
+		thisCalcInfo.桩端承载力项 = DecimalCalc(Math.min(thisCalcInfo.桩端承载力计算值, thisCalcInfo.桩端承载力限值));
+		thisCalcInfo.ResultText += "桩端承载力项: " + thisCalcInfo.桩端承载力项 + "kN\n";
+		thisCalcInfo.ResultText += "桩端承载力限值: (发挥系数: " + thisCalcInfo.桩端发挥系数 + ") " + thisCalcInfo.桩端承载力限值 + "kN\n";
+		thisCalcInfo.ResultText += "桩端承载力计算值: (清底系数m0: " + thisCalcInfo.清底系数m0 + ", 修正系数λ: " + thisCalcInfo.修正系数λ + ", 桩端处土承载力fa0:" + thisCalcInfo.桩端处土承载力fa0 + "kPa) " + thisCalcInfo.桩端承载力计算值 + "kN\n";
+
+		thisCalcInfo.承载力容许值 = DecimalCalc(thisCalcInfo.侧摩阻力项 + thisCalcInfo.桩端承载力项 + thisCalcInfo.置换土重项);
+		var ResultText_Summary;
+		ResultText_Summary = "桩顶承载力容许值[Ra]: " + thisCalcInfo.承载力容许值 + "kN\n";
+		ResultText_Summary += "1/2u SUM(qi*li) + Ap*qr = " + thisCalcInfo.侧摩阻力项 + "kN + " + thisCalcInfo.桩端承载力项 + "kN + " + thisCalcInfo.置换土重项 + "kN = " + thisCalcInfo.承载力容许值 + "kN\n";
+		ResultText_Summary += "\n";
+		thisCalcInfo.ResultText = ResultText_Summary + thisCalcInfo.ResultText;
+		thisCalcInfo.ResultText = name + " " + thisCalcInfo.备注 + "\n" + thisCalcInfo.ResultText;
+	}
+	return thisCalcInfo;
+}
+
+function RefreshPile_计算结果() {
+	CalcInfo = CalcPile(CurrentPile_Name, CurrentPile);
+	ConInfo.计算结果.value = CalcInfo.ResultText;
+}
+
+function RefreshPileInfo() {
+	if (PileSelect.length != 0 && PileSelect.firstChild.value == "") PileSelect.removeChild(PileSelect.firstChild);
+	RefreshPile_基本();
+	RefreshPile_土层();
+	RefreshPile_计算结果();
 }
 
 function PileEdit_AfterChange地层() {
