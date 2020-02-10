@@ -359,7 +359,7 @@ function RefreshPile_土层() {
 		li.appendChild(liin);
 		var liin = document.createElement("input");
 		liin.name = ei;
-		liin.style = "text-align: center; width: 35%; background-color: #FEE; border:1px solid #FDD";
+		liin.style = "text-align: center; width: 33%; background-color: #FEE; border:1px solid #FDD";
 		liin.value = element.土类名称;
 		liin.onchange = PileEdit_Chg土类名称;
 		li.appendChild(liin);
