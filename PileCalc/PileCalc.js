@@ -72,7 +72,7 @@ function ImportJson() {
 	};
 }
 
-function ExportJSON() {
+function ExportJson() {
 	var Export_Blob = new Blob([JSON.stringify(PileCalcPrj)]);
 	var SaveLink = document.createElement("a");
 	SaveLink.href = URL.createObjectURL(Export_Blob);
