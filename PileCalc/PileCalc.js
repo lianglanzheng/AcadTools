@@ -98,6 +98,10 @@ function ExportResult() {
 		ele.style = "padding: 0";
 		var li = document.createElement("li");
 		li.style = "list-style-type:none; font-weight: bold";
+		li.textContent = "参考钻孔: " + thisCalcInfo.参考钻孔;
+		ele.appendChild(li);
+		var li = document.createElement("li");
+		li.style = "list-style-type:none; font-weight: bold";
 		li.textContent = "桩长: " + thisCalcInfo.桩长 + "m";
 		ele.appendChild(li);
 		var li = document.createElement("li");
@@ -481,7 +485,7 @@ function CalcPile(name, target) {
 
 		thisCalcInfo.承载力容许值 = DecimalCalc(thisCalcInfo.侧摩阻力项 + thisCalcInfo.桩端承载力项 + thisCalcInfo.置换土重项);
 		var ResultText_Summary;
-		ResultText_Summary = "桩长: " + thisCalcInfo.桩长 + "m, 桩径: " + thisCalcInfo.桩径 + "m, 桩顶标高: " + thisCalcInfo.桩顶标高 + "m, 桩底标高: " + thisCalcInfo.桩底标高 + "m\n";
+		ResultText_Summary = "参考钻孔: " + thisCalcInfo.参考钻孔 + " 桩长: " + thisCalcInfo.桩长 + "m, 桩径: " + thisCalcInfo.桩径 + "m, 桩顶标高: " + thisCalcInfo.桩顶标高 + "m, 桩底标高: " + thisCalcInfo.桩底标高 + "m\n";
 		ResultText_Summary += "桩顶承载力容许值[Ra]: " + thisCalcInfo.承载力容许值 + "kN\n";
 		ResultText_Summary += "1/2u SUM(qi*li) + Ap*qr = " + thisCalcInfo.侧摩阻力项 + "kN + " + thisCalcInfo.桩端承载力项 + "kN + " + thisCalcInfo.置换土重项 + "kN = " + thisCalcInfo.承载力容许值 + "kN\n";
 		ResultText_Summary += "\n";
