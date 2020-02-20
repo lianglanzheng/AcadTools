@@ -72,6 +72,7 @@ namespace PlotFormatter
             }
             FrameViewList = FrameViewList.OrderBy(o => o.Key).ToDictionary(o => o.Key, p => p.Value);
             AcadApp.ActiveDocument.Layouts.Item("Model").ConfigName = GlobalInfo.ModelConfigName;
+            AcadApp.ActiveDocument.Layouts.Item("Model").StyleSheet = StyleSheetName;
             foreach (KeyValuePair<string, FormatTask.FrameView> iFrameView in FrameViewList)
             {
                 AddBlankLayout(iFrameView.Value.Page);
